@@ -8,6 +8,7 @@ exports.getAllPosts = () => Creature.find();
 
 exports.getOnePost = (postId) => {
   const post = Creature.findById(postId).populate("owner");
+
   return post;
 };
 

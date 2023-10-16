@@ -11,7 +11,7 @@
                             <h3>Created by an author: {{post.owner.firstName}} {{post.owner.lastName}}</h3>
                             <div class="card_character">
                                 <p class="card-species">Species: {{post.species}}</p>
-                                <p class="card-skin">Skin colour: {{post.skinColor}}k</p>
+                                <p class="card-skin">Skin colour: {{post.skinColor}}</p>
                                 <p class="card-eye">Eye Colour: {{post.eyeColor}}</p>
                             </div>
 
@@ -29,7 +29,6 @@
                                 {{else}}
                                 <a href="/posts/details/{{post._id}}/votes" class="vote-up">Vote</a>
                                 {{/if}}
-                                <!-- logged in user who has already voted-->
                                 {{/unless}}
                             </div>
                             {{/if}}

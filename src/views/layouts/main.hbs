@@ -1,51 +1,49 @@
-<!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Home Page</title>
 
     <!-- Do not forget to change the path to the css file -->
-    <link href="/css/style.css" type="text/css" rel="stylesheet">
-</head>
+    <link href="/css/style.css" type="text/css" rel="stylesheet" />
+  </head>
 
-<body>
-
+  <body>
 
     <div id="box">
 
-        {{#if error}}
-    <div class="error-container">
-        <p>{{error}}</p>
-    </div>
-        {{/if}}
+      {{#if error}}
+        <div class="error-container">
+          <p>{{error}}</p>
+        </div>
+      {{/if}}
 
-        <nav>
-            <!-- Do not forget to change the path to the image -->
-            <img src="/img/logo.png" alt="logo">
+      <nav>
+        <!-- Do not forget to change the path to the image -->
+        <img src="/img/logo.png" alt="logo" />
 
-            <ul class="menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="/posts">All Posts</a></li>
-                {{#if isAuthenticated}}
-                <li><a href="/posts/create">Create Post</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="/users/logout">Logout</a></li>
-                {{else}}
-                <li><a href="/users/register">Register</a></li>
-                <li><a href="/users/login">Login</a></li>
-                {{/if}}
-            </ul>
+        <ul class="menu">
+          <li><a href="/">Home</a></li>
+          <li><a href="/posts">All Posts</a></li>
+          {{#if isAuthenticated}}
+            <li><a href="/posts/create">Create Post</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/users/logout">Logout</a></li>
+          {{else}}
+            <li><a href="/users/register">Register</a></li>
+            <li><a href="/users/login">Login</a></li>
+          {{/if}}
+        </ul>
 
-        </nav>
+      </nav>
 
       {{{body}}}
 
-        <footer>
-            © JS Back-End Exam 2023
-        </footer>
+      <footer>
+        © JS Back-End Exam 2023
+      </footer>
     </div>
 
-</body>
+  </body>
 
 </html>

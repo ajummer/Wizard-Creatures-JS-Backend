@@ -2,17 +2,18 @@ const router = require("express").Router();
 const creatureService = require("../services/creatureService.js");
 const { getErrorMessage } = require("../utils/errorHelpers.js");
 const { emailExtractor } = require("../utils/utiity.js");
+const { isAuth } = require("../middlewares/authMiddleware.js");
 
 router.get("/", async (req, res) => {
   const posts = await creatureService.getAllPosts().lean();
   res.render("posts", { posts });
 });
 
-router.get("/create", (req, res) => {
+router.get("/create", isAuth, (req, res) => {
   res.render("posts/create");
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", isAuth, async (req, res) => {
   const creatureData = {
     ...req.body,
     owner: req.user._id,
@@ -27,7 +28,6 @@ router.post("/create", async (req, res) => {
 
 router.get("/details/:postId", async (req, res) => {
   const postId = req.params.postId;
-  console.log(req.user);
   try {
     const post = await creatureService
       .getOnePost(postId)
@@ -36,7 +36,7 @@ router.get("/details/:postId", async (req, res) => {
     // get all voted users emails
     const votedUsers = emailExtractor(post?.votes);
     // check if current user voted
-    const isVoted = votedUsers.includes(req.user?.email)
+    const isVoted = votedUsers.includes(req.user?.email);
     const isOwner = req.user?._id == post.owner._id;
     res.render("posts/details", {
       post,
@@ -46,11 +46,12 @@ router.get("/details/:postId", async (req, res) => {
       isVoted,
     });
   } catch (err) {
+    console.log(err)
     res.render("posts/details", { error: getErrorMessage(err) });
   }
 });
 
-router.get("/details/:postId/edit", async (req, res) => {
+router.get("/details/:postId/edit", isAuth, async (req, res) => {
   const postId = req.params.postId;
   try {
     const post = await creatureService.getOnePost(postId).lean();
@@ -65,7 +66,7 @@ router.get("/details/:postId/edit", async (req, res) => {
   }
 });
 
-router.post("/details/:postId/edit", async (req, res) => {
+router.post("/details/:postId/edit", isAuth, async (req, res) => {
   const postId = req.params.postId;
   const post = req.body;
   try {
@@ -77,7 +78,7 @@ router.post("/details/:postId/edit", async (req, res) => {
   }
 });
 
-router.get("/details/:postId/delete", async (req, res) => {
+router.get("/details/:postId/delete", isAuth, async (req, res) => {
   const postId = req.params.postId;
   try {
     const post = await creatureService.getOnePost(postId);
@@ -94,7 +95,7 @@ router.get("/details/:postId/delete", async (req, res) => {
   }
 });
 
-router.get("/details/:postId/votes", async (req, res) => {
+router.get("/details/:postId/votes", isAuth, async (req, res) => {
   const postId = req.params.postId;
   const user = req.user._id;
 
