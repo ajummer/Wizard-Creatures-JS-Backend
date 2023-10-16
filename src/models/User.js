@@ -3,9 +3,14 @@ const bcrypt = require("bcrypt");
 const { SALT } = require("../constants.js");
 
 const userSchema = new mongoose.Schema({
-  username: {
+  firstName: {
     type: String,
-    required: [true,"Username is required !"],
+    required: [true,"Firstname is required !"],
+    unique: true,
+  },
+  lastName: {
+    type: String,
+    required: [true,"Lastname is required !"],
     unique: true,
   },
   email: {
