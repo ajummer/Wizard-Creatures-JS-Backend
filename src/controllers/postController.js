@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const creatureService = require("../services/creatureService.js");
 const { getErrorMessage } = require("../utils/errorHelpers.js");
+const { emailExtractor } = require("../utils/utiity.js");
 
 router.get("/", async (req, res) => {
   const posts = await creatureService.getAllPosts().lean();
@@ -26,9 +27,27 @@ router.post("/create", async (req, res) => {
 
 router.get("/details/:postId", async (req, res) => {
   const postId = req.params.postId;
-  const post = await creatureService.getOnePost(postId).lean();
-  const isOwner = req.user?._id == post.owner._id;
-  res.render("posts/details", { post, isOwner });
+  console.log(req.user);
+  try {
+    const post = await creatureService
+      .getOnePost(postId)
+      .populate("votes.user")
+      .lean();
+    // get all voted users emails
+    const votedUsers = emailExtractor(post?.votes);
+    // check if current user voted
+    const isVoted = votedUsers.includes(req.user?.email)
+    const isOwner = req.user?._id == post.owner._id;
+    res.render("posts/details", {
+      post,
+      isOwner,
+      votes: post.votes.length,
+      votedUsers,
+      isVoted,
+    });
+  } catch (err) {
+    res.render("posts/details", { error: getErrorMessage(err) });
+  }
 });
 
 router.get("/details/:postId/edit", async (req, res) => {
@@ -58,21 +77,33 @@ router.post("/details/:postId/edit", async (req, res) => {
   }
 });
 
-router.get("/details/:postId/delete" , async (req,res) => {
-  const postId = req.params.postId
+router.get("/details/:postId/delete", async (req, res) => {
+  const postId = req.params.postId;
   try {
-    const post = await creatureService.getOnePost(postId)
-    if(req.user._id == post.owner._id){
-      await creatureService.deletePost(postId)
-     res.redirect("/posts")
+    const post = await creatureService.getOnePost(postId);
+    if (req.user._id == post.owner._id) {
+      await creatureService.deletePost(postId);
+      res.redirect("/posts");
     } else {
-      res.redirect("/404")
+      res.redirect("/404");
     }
-  }catch(err){
+  } catch (err) {
     res.render(`/posts/details/${postId}`, {
       error: "Unsuccessfull attempt to delete the post!",
     });
   }
-})
+});
+
+router.get("/details/:postId/votes", async (req, res) => {
+  const postId = req.params.postId;
+  const user = req.user._id;
+
+  try {
+    await creatureService.addVote(postId, { user });
+    res.redirect(`/posts/details/${postId}`);
+  } catch (err) {
+    res.render("posts/details", { error: getErrorMessage(err) });
+  }
+});
 
 module.exports = router;

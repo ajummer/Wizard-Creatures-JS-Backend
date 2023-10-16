@@ -29,6 +29,15 @@ const creatureSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "User",
   },
+  votes: [
+    {
+      user: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "User"
+      }
+    }
+  ]
 });
 
 const Creature = mongoose.model("Creature", creatureSchema);

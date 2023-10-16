@@ -17,3 +17,10 @@ exports.updateOnePost = (postId, postData) => {
 };
 
 exports.deletePost = (postId) => Creature.findByIdAndDelete(postId)
+
+exports.addVote =  async (postId,user) => {
+  const post =  await Creature.findById(postId)
+  post.votes.push(user)
+  return post.save()
+}
+
