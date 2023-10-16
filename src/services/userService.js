@@ -34,7 +34,7 @@ exports.register = async (userData) => {
     const token = await generateToken(createdUser);
     return token;
   } catch (err) {
-    return err;
+    throw new Error(err);
   }
 };
 

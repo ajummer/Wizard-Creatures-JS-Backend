@@ -23,13 +23,13 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const userData = req.body;
-  console.log(userData);
+  const { firstName, lastName, email, password } = req.body;
   try {
-    const token = await userService.register(userData);
+    const token = await userService.register({firstName,lastName,email,password});
     res.cookie("token", token);
     res.redirect("/");
   } catch (err) {
+    console.log(err);
     res.render("users/register", { error: getErrorMessage(err) });
   }
 });

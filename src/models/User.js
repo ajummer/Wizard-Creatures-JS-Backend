@@ -3,23 +3,23 @@ const bcrypt = require("bcrypt");
 const { SALT } = require("../constants.js");
 
 const userSchema = new mongoose.Schema({
-  firstname: {
+  firstName: {
     type: String,
-    required: [true,"Firstname is required !"],
+    required: [true, "Firstname is required !"],
     unique: true,
   },
-  lastname: {
+  lastName: {
     type: String,
-    required: [true,"Lastname is required !"],
+    required: [true, "Lastname is required !"],
     unique: true,
   },
   email: {
     type: String,
-    required: [true,"Email is required ! !"],
+    required: [true, "Email is required ! !"],
   },
   password: {
     type: String,
-    required: [true,"Password is required !"],
+    required: [true, "Password is required !"],
   },
 });
 
@@ -28,7 +28,6 @@ userSchema.virtual("repeatPassword").set(function (value) {
     throw new Error("Password missmatch !");
   }
 });
-
 
 userSchema.pre("save", async function () {
   const hash = await bcrypt.hash(this.password, SALT);
