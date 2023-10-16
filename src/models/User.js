@@ -29,10 +29,13 @@ userSchema.virtual("repeatPassword").set(function (value) {
   }
 });
 
+
 userSchema.pre("save", async function () {
   const hash = await bcrypt.hash(this.password, SALT);
   this.password = hash;
 });
+
+
 
 const User = mongoose.model("User", userSchema);
 
