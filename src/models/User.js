@@ -3,12 +3,12 @@ const bcrypt = require("bcrypt");
 const { SALT } = require("../constants.js");
 
 const userSchema = new mongoose.Schema({
-  firstName: {
+  firstname: {
     type: String,
     required: [true,"Firstname is required !"],
     unique: true,
   },
-  lastName: {
+  lastname: {
     type: String,
     required: [true,"Lastname is required !"],
     unique: true,
@@ -28,6 +28,7 @@ userSchema.virtual("repeatPassword").set(function (value) {
     throw new Error("Password missmatch !");
   }
 });
+
 
 userSchema.pre("save", async function () {
   const hash = await bcrypt.hash(this.password, SALT);
