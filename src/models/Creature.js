@@ -3,27 +3,27 @@ const mongoose = require("mongoose");
 const creatureSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Name is required !"],
   },
   species: {
     type: String,
-    required: true,
+    required: [true, "Species is required !"],
   },
   skinColor: {
     type: String,
-    required: true,
+    required: [true, "Skin color is required !"],
   },
   eyeColor: {
     type: String,
-    required: true,
+    required: [true, "Eye color is required !"],
   },
   image: {
     type: String,
-    required: true,
+    required: [true, "Image is required !"],
   },
   description: {
     type: String,
-    required: true,
+    required: [true, "Description is required !"],
   },
   owner: {
     type: mongoose.Types.ObjectId,
