@@ -7,8 +7,7 @@ exports.create = (creatureData) => {
 exports.getAllPosts = () => Creature.find();
 
 exports.getOnePost = (postId) => {
-  const post = Creature.findById(postId).populate("owner");
-
+  const post = Creature.findOne({ _id: postId }).populate("owner");
   return post;
 };
 
@@ -17,11 +16,10 @@ exports.updateOnePost = (postId, postData) => {
   return post;
 };
 
-exports.deletePost = (postId) => Creature.findByIdAndDelete(postId)
+exports.deletePost = (postId) => Creature.findByIdAndDelete(postId);
 
-exports.addVote =  async (postId,user) => {
-  const post =  await Creature.findById(postId)
-  post.votes.push(user)
-  return post.save()
-}
-
+exports.addVote = async (postId, user) => {
+  const post = await Creature.findById(postId);
+  post.votes.push(user);
+  return post.save();
+};

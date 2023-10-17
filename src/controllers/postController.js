@@ -28,12 +28,15 @@ router.post("/create", isAuth, async (req, res) => {
 
 router.get("/details/:postId", async (req, res) => {
   const postId = req.params.postId;
+
   try {
     const post = await creatureService
       .getOnePost(postId)
       .populate("votes.user")
       .lean();
-    // get all voted users emails
+    if(!post){
+      res.redirect("/404")
+    }
     const votedUsers = emailExtractor(post?.votes);
     // check if current user voted
     const isVoted = votedUsers.includes(req.user?.email);
@@ -46,7 +49,7 @@ router.get("/details/:postId", async (req, res) => {
       isVoted,
     });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.render("posts/details", { error: getErrorMessage(err) });
   }
 });
