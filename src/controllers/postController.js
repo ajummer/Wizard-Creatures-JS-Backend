@@ -34,6 +34,7 @@ router.get("/details/:postId", async (req, res) => {
       .getOnePost(postId)
       .populate("votes.user")
       .lean();
+      // if 12 bytes invalid id is passed
     if(!post){
       res.redirect("/404")
     }
@@ -50,7 +51,7 @@ router.get("/details/:postId", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render("posts/details", { error: getErrorMessage(err) });
+    res.render("404", { error: getErrorMessage(err) });
   }
 });
 
