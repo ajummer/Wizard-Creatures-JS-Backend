@@ -8,6 +8,7 @@ exports.create = (creatureData) => {
 exports.getAllPosts = () => Creature.find();
 
 exports.getOnePost = (postId) => {
+  
   const isValidObjectId = mongoose.isValidObjectId(postId);
   if (!isValidObjectId) {
     throw new Error()
@@ -29,3 +30,7 @@ exports.addVote = async (postId, user) => {
   post.votes.push(user);
   return post.save();
 };
+
+exports.getByOwner = (userId) => {
+  return Creature.find({owner: userId})
+}

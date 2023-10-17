@@ -1,4 +1,4 @@
 
- * Add Validations and route guards
- * Fix bug where it crashes with invalid creature id
+ * Add Validations
+ 
  * Add profile page
